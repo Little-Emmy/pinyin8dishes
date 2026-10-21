@@ -103,7 +103,16 @@
         function speak() {
             let msg = new SpeechSynthesisUtterance(data[curr].c);
             msg.lang = 'zh-CN'; 
-            msg.rate = 0.8; // 稍微放慢語速讓學生聽清楚
+            msg.rate = 0.8; 
+            
+            // 強制抓取 iPhone 裡的普通話聲音
+            let voices = window.speechSynthesis.getVoices();
+            let mandarinVoice = voices.find(voice => voice.lang.includes('zh-CN') || voice.lang.includes('zh-TW') || voice.lang.includes('zh-Hans'));
+            
+            if (mandarinVoice) {
+                msg.voice = mandarinVoice;
+            }
+            
             window.speechSynthesis.speak(msg);
         }
         
@@ -118,10 +127,15 @@
             } else {
                 resDiv.style.color = '#d32f2f';
                 resDiv.innerHTML = `❌ 拼錯了，請再試一次！<br>提示：正確答案包含 <strong>${data[curr].t}</strong>`;
-                speak(); // 答錯自動重讀一次
+                speak(); 
             }
         }
         
+        // 確保聲音庫載入
+        window.speechSynthesis.onvoiceschanged = function() {
+            let voices = window.speechSynthesis.getVoices();
+        };
+
         window.onload = next;
     </script>
 </body>
