@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>中國八大菜系 - 拼音溫習</title>
+    <style>
+        body { 
+            font-family: 'PingFang HK', 'Microsoft JhengHei', sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background-color: #fdf6e3; 
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 { font-size: 2.5em; color: #d32f2f; margin-bottom: 5px; }
+        .cuisine-type { font-size: 1.2em; color: #777; margin-bottom: 20px; font-weight: bold; }
+        input { 
+            font-size: 1.5em; 
+            padding: 12px; 
+            width: 90%; 
+            text-align: center; 
+            margin: 15px 0; 
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+        input:focus { border-color: #4CAF50; }
+        button { 
+            font-size: 1.2em; 
+            padding: 12px 25px; 
+            margin: 10px 5px; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .speak-btn { background-color: #2196F3; color: white; }
+        .speak-btn:active { background-color: #1976D2; }
+        .submit-btn { background-color: #4CAF50; color: white; }
+        .submit-btn:active { background-color: #388E3C; }
+        #result { font-size: 1.3em; margin-top: 20px; line-height: 1.5; min-height: 80px; }
+        .hint { font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>八大菜系 拼音測驗</h2>
+        <p class="hint">請輸入拼音字母 (無需聲調，如 tangcuyu)</p>
+        
+        <h1 id="word">載入中...</h1>
+        <div id="cuisine" class="cuisine-type"></div>
+        
+        <button class="speak-btn" onclick="speak()">🔊 聽普通話發音</button>
+        
+        <input type="text" id="answer" placeholder="輸入拼音..." onkeypress="if(event.key === 'Enter') check()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        
+        <br>
+        <button class="submit-btn" onclick="check()">提交答案</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const data = [
+            {c:"糖醋魚", p:"tangcuyu", t:"táng cù yú", type:"魯菜"},
+            {c:"蔥爆羊肉", p:"congbaoyangrou", t:"cōng bào yáng ròu", type:"魯菜"},
+            {c:"麻婆豆腐", p:"mapodoufu", t:"má pó dòu fu", type:"川菜"},
+            {c:"宮保雞丁", p:"gongbaojiding", t:"gōng bǎo jī dīng", type:"川菜"},
+            {c:"脆皮乳豬", p:"cuipiruzhu", t:"cuì pí rǔ zhū", type:"粵菜"},
+            {c:"冬瓜盅", p:"dongguazhong", t:"dōng guā zhōng", type:"粵菜"},
+            {c:"佛跳牆", p:"fotiaoqiang", t:"fó tiào qiáng", type:"閩菜"},
+            {c:"太極明蝦", p:"taijimingxia", t:"tài jí míng xiā", type:"閩菜"},
+            {c:"淮陽獅子頭", p:"huaiyangshizitou", t:"Huáiyáng shī zi tóu", type:"蘇菜"},
+            {c:"鹽水鴨", p:"yanshuiya", t:"yán shuǐ yā", type:"蘇菜"},
+            {c:"龍井蝦仁兒", p:"longjingxiarenr", t:"lóng jǐng xiā rénr", type:"浙菜"},
+            {c:"油燜春筍", p:"youmenchunsun", t:"yóu mèn chūn sǔn", type:"浙菜"},
+            {c:"剁椒魚頭", p:"duojiaoyutou", t:"duò jiāo yú tóu", type:"湘菜"},
+            {c:"洞庭野鴨", p:"dongtingyeya", t:"Dòngtíng yě yā", type:"湘菜"},
+            {c:"徽州毛豆腐", p:"huizhoumaodoufu", t:"Huīzhōu máo dòu fu", type:"徽菜"},
+            {c:"火腿燉甲魚", p:"huotuidunjiayu", t:"huǒ tuǐ dùn jiǎ yú", type:"徽菜"}
+        ];
+        
+        let curr = 0;
+        
+        function next() {
+            curr = Math.floor(Math.random() * data.length);
+            document.getElementById('word').innerText = data[curr].c;
+            document.getElementById('cuisine').innerText = `【${data[curr].type}】`;
+            document.getElementById('answer').value = '';
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('answer').focus();
+        }
+        
+        function speak() {
+            let msg = new SpeechSynthesisUtterance(data[curr].c);
+            msg.lang = 'zh-CN'; 
+            msg.rate = 0.8; // 稍微放慢語速讓學生聽清楚
+            window.speechSynthesis.speak(msg);
+        }
+        
+        function check() {
+            let ans = document.getElementById('answer').value.toLowerCase().replace(/[^a-z]/g, '');
+            let resDiv = document.getElementById('result');
+            
+            if(ans === data[curr].p) {
+                resDiv.style.color = '#2e7d32';
+                resDiv.innerHTML = `✅ 答對了！<br>正確拼音：<strong>${data[curr].t}</strong>`;
+                setTimeout(next, 2000); 
+            } else {
+                resDiv.style.color = '#d32f2f';
+                resDiv.innerHTML = `❌ 拼錯了，請再試一次！<br>提示：正確答案包含 <strong>${data[curr].t}</strong>`;
+                speak(); // 答錯自動重讀一次
+            }
+        }
+        
+        window.onload = next;
+    </script>
+</body>
+</html>
