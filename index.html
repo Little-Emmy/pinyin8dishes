@@ -148,7 +148,6 @@
 
     .correct { color: #19713a; }
     .incorrect { color: #b3261e; }
-    .answer { color: #303030; }
   </style>
 </head>
 
@@ -189,34 +188,46 @@
 
   <script>
     const data = [
-      { c: "糖醋魚",     p: "tangcuyu",         t: "táng cù yú",        type: "魯菜" },
-      { c: "蔥爆羊肉",   p: "congbaoyangrou",   t: "cōng bào yáng ròu", type: "魯菜" },
-      { c: "麻婆豆腐",   p: "mapodoufu",        t: "má pó dòu fu",      type: "川菜" },
-      { c: "宮保雞丁",   p: "gongbaojiding",    t: "gōng bǎo jī dīng",  type: "川菜" },
-      { c: "脆皮乳豬",   p: "cuipiruzhu",       t: "cuì pí rǔ zhū",     type: "粵菜" },
-      { c: "冬瓜盅",     p: "dongguazhong",     t: "dōng guā zhōng",    type: "粵菜" },
-      { c: "佛跳牆",     p: "fotiaoqiang",      t: "fó tiào qiáng",     type: "閩菜" },
-      { c: "太極明蝦",   p: "taijimingxia",     t: "tài jí míng xiā",   type: "閩菜" },
+      { c: "糖醋魚", p: "tangcuyu", t: "táng cù yú", type: "魯菜" },
+      { c: "蔥爆羊肉", p: "congbaoyangrou", t: "cōng bào yáng ròu", type: "魯菜" },
+      { c: "麻婆豆腐", p: "mapodoufu", t: "má pó dòu fu", type: "川菜" },
+      { c: "宮保雞丁", p: "gongbaojiding", t: "gōng bǎo jī dīng", type: "川菜" },
+      { c: "脆皮乳豬", p: "cuipiruzhu", t: "cuì pí rǔ zhū", type: "粵菜" },
+      { c: "冬瓜盅", p: "dongguazhong", t: "dōng guā zhōng", type: "粵菜" },
+      { c: "佛跳牆", p: "fotiaoqiang", t: "fó tiào qiáng", type: "閩菜" },
+      { c: "太極明蝦", p: "taijimingxia", t: "tài jí míng xiā", type: "閩菜" },
       {
-        c: "淮陽獅子頭", p: "huaiyangshizitou", t: "Huaiyang shi zi tou", type: "蘇菜",
-        strictPattern: /^Huaiyang\s*shi\s*zi\s*tou$/,
-        formatHint: "「Huaiyang」要連住寫，並以大楷 H 開頭。"
+        c: "淮陽獅子頭",
+        p: "huaiyangshizitou",
+        t: "Huaiyang shi zi tou",
+        type: "蘇菜",
+        strictAnswer: "Huaiyangshizitou",
+        placeName: "Huaiyang",
+        formatHint: "Huaiyang 要連住寫，並以大楷 H 開頭。"
       },
-      { c: "鹽水鴨",     p: "yanshuiya",        t: "yán shuǐ yā",       type: "蘇菜" },
-      { c: "龍井蝦仁",   p: "longjingxiaren",   t: "lóng jǐng xiā rén", type: "浙菜" },
-      { c: "油燜春筍",   p: "youmenchunsun",    t: "yóu mèn chūn sǔn",  type: "浙菜" },
-      { c: "剁椒魚頭",   p: "duojiaoyutou",     t: "duò jiāo yú tóu",   type: "湘菜" },
+      { c: "鹽水鴨", p: "yanshuiya", t: "yán shuǐ yā", type: "蘇菜" },
+      { c: "龍井蝦仁", p: "longjingxiaren", t: "lóng jǐng xiā rén", type: "浙菜" },
+      { c: "油燜春筍", p: "youmenchunsun", t: "yóu mèn chūn sǔn", type: "浙菜" },
+      { c: "剁椒魚頭", p: "duojiaoyutou", t: "duò jiāo yú tóu", type: "湘菜" },
       {
-        c: "洞庭野鴨", p: "dongtingyeya", t: "Dongting ye ya", type: "湘菜",
-        strictPattern: /^Dongting\s*ye\s*ya$/,
-        formatHint: "「Dongting」要連住寫，並以大楷 D 開頭。"
+        c: "洞庭野鴨",
+        p: "dongtingyeya",
+        t: "Dongting ye ya",
+        type: "湘菜",
+        strictAnswer: "Dongtingyeya",
+        placeName: "Dongting",
+        formatHint: "Dongting 要連住寫，並以大楷 D 開頭。"
       },
       {
-        c: "徽州毛豆腐", p: "huizhoumaodoufu", t: "Huizhou mao dou fu", type: "徽菜",
-        strictPattern: /^Huizhou\s*mao\s*dou\s*fu$/,
-        formatHint: "「Huizhou」要連住寫，並以大楷 H 開頭。"
+        c: "徽州毛豆腐",
+        p: "huizhoumaodoufu",
+        t: "Huizhou mao dou fu",
+        type: "徽菜",
+        strictAnswer: "Huizhoumaodoufu",
+        placeName: "Huizhou",
+        formatHint: "Huizhou 要連住寫，並以大楷 H 開頭。"
       },
-      { c: "火腿燉甲魚", p: "huotuidunjiayu",   t: "huǒ tuǐ dùn jiǎ yú", type: "徽菜" }
+      { c: "火腿燉甲魚", p: "huotuidunjiayu", t: "huǒ tuǐ dùn jiǎ yú", type: "徽菜" }
     ];
 
     let currentIndex = 0;
@@ -226,7 +237,7 @@
     function showWord() {
       const item = data[currentIndex];
       document.getElementById("word").textContent = item.c;
-      document.getElementById("cuisine").textContent = `【${item.type}】`;
+      document.getElementById("cuisine").textContent = "【" + item.type + "】";
       clearAnswer();
     }
 
@@ -256,7 +267,7 @@
 
     function clearAnswer() {
       document.getElementById("answer").value = "";
-      document.getElementById("result").innerHTML = "";
+      document.getElementById("result").textContent = "";
       document.getElementById("answer").focus();
     }
 
@@ -264,9 +275,9 @@
       const voices = window.speechSynthesis.getVoices();
 
       mandarinVoice =
-        voices.find(v => /^zh[-_]CN/i.test(v.lang)) ||
-        voices.find(v => /Mandarin|普通話|普通话|國語|国语/i.test(v.name)) ||
-        voices.find(v => /^zh[-_]Hans/i.test(v.lang)) ||
+        voices.find(function (voice) { return /^zh[-_]CN/i.test(voice.lang); }) ||
+        voices.find(function (voice) { return /Mandarin|普通話|普通话|國語|国语/i.test(voice.name); }) ||
+        voices.find(function (voice) { return /^zh[-_]Hans/i.test(voice.lang); }) ||
         null;
 
       return mandarinVoice;
@@ -297,13 +308,13 @@
       document.getElementById("result").className = "incorrect";
       document.getElementById("result").textContent = "正在載入普通話語音…";
 
-      setTimeout(() => {
+      setTimeout(function () {
         if (thisRequest !== speechRequest) return;
 
         voice = findMandarinVoice();
 
         if (voice) {
-          document.getElementById("result").innerHTML = "";
+          document.getElementById("result").textContent = "";
           sayWithMandarinVoice(voice);
         } else {
           document.getElementById("result").className = "incorrect";
@@ -313,18 +324,22 @@
       }, 500);
     }
 
+    function isStrictAnswer(rawAnswer, item) {
+      const words = rawAnswer.split(/\s+/);
+      const joined = words.join("");
+
+      return joined === item.strictAnswer &&
+        words[0].indexOf(item.placeName) === 0;
+    }
+
     function check() {
       const rawAnswer = document.getElementById("answer").value.trim();
-
-      const answer = rawAnswer
-        .toLowerCase()
-        .replace(/[^a-z]/g, "");
-
+      const answer = rawAnswer.toLowerCase().replace(/[^a-z]/g, "");
       const item = data[currentIndex];
       const result = document.getElementById("result");
 
-      const isCorrect = item.strictPattern
-        ? item.strictPattern.test(rawAnswer)
+      const isCorrect = item.strictAnswer
+        ? isStrictAnswer(rawAnswer, item)
         : answer === item.p;
 
       if (!answer) {
@@ -332,17 +347,16 @@
         result.textContent = "請先輸入拼音。";
       } else if (isCorrect) {
         result.className = "correct";
-        result.innerHTML = `答對了！正確拼音：<strong>${item.t}</strong>`;
+        result.textContent = "答對了！正確拼音：" + item.t;
       } else {
         result.className = "incorrect";
-        result.innerHTML =
-          `再試一次。正確拼音是：<strong class="answer"><LaTex>{item.t}</strong>` +           `</LaTex>{item.formatHint ? `<br><small>${item.formatHint}</small>` : ""}`;
-
+        result.textContent = "再試一次。正確拼音是：" + item.t +
+          (item.formatHint ? " " + item.formatHint : "");
         speak();
       }
     }
 
-    document.getElementById("answer").addEventListener("keydown", event => {
+    document.getElementById("answer").addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         check();
       }
