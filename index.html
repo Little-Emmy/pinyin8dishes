@@ -1,142 +1,317 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>中國八大菜系 - 拼音溫習</title>
-    <style>
-        body { 
-            font-family: 'PingFang HK', 'Microsoft JhengHei', sans-serif; 
-            text-align: center; 
-            padding: 20px; 
-            background-color: #fdf6e3; 
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        h1 { font-size: 2.5em; color: #d32f2f; margin-bottom: 5px; }
-        .cuisine-type { font-size: 1.2em; color: #777; margin-bottom: 20px; font-weight: bold; }
-        input { 
-            font-size: 1.5em; 
-            padding: 12px; 
-            width: 90%; 
-            text-align: center; 
-            margin: 15px 0; 
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            outline: none;
-        }
-        input:focus { border-color: #4CAF50; }
-        button { 
-            font-size: 1.2em; 
-            padding: 12px 25px; 
-            margin: 10px 5px; 
-            cursor: pointer; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .speak-btn { background-color: #2196F3; color: white; }
-        .speak-btn:active { background-color: #1976D2; }
-        .submit-btn { background-color: #4CAF50; color: white; }
-        .submit-btn:active { background-color: #388E3C; }
-        #result { font-size: 1.3em; margin-top: 20px; line-height: 1.5; min-height: 80px; }
-        .hint { font-size: 0.9em; color: #666; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>中國八大菜系－拼音溫習</title>
+
+  <style>
+    :root {
+      --red: #c73932;
+      --blue: #1677c8;
+      --green: #24894c;
+      --gold: #a56b14;
+      --ink: #252525;
+      --paper: #fffdf8;
+      --cream: #f7eedf;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang HK", "Microsoft JhengHei", sans-serif;
+      text-align: center;
+      background: var(--cream);
+      color: var(--ink);
+      padding: 22px 16px 36px;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 28px 20px 26px;
+      background: var(--paper);
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(79, 53, 22, .14);
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 1.7rem;
+    }
+
+    .hint {
+      margin: 0;
+      color: #666;
+      line-height: 1.55;
+      font-size: .95rem;
+    }
+
+    .progress {
+      margin: 18px 0 4px;
+      color: var(--gold);
+      font-weight: 700;
+      font-size: .95rem;
+    }
+
+    h1 {
+      min-height: 3.2rem;
+      margin: 6px 0 2px;
+      color: var(--red);
+      font-size: clamp(2.2rem, 9vw, 3.15rem);
+    }
+
+    .cuisine-type {
+      min-height: 1.7rem;
+      margin-bottom: 12px;
+      color: #666;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    button {
+      min-height: 47px;
+      margin: 6px 3px;
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 9px;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .1s, filter .15s;
+    }
+
+    button:active {
+      transform: scale(.97);
+      filter: brightness(.92);
+    }
+
+    .speak-btn {
+      background: var(--blue);
+      width: min(100%, 270px);
+    }
+
+    .submit-btn {
+      background: var(--green);
+      min-width: 150px;
+    }
+
+    .nav-btn {
+      background: #656565;
+      min-width: 118px;
+    }
+
+    .random-btn {
+      background: var(--gold);
+      min-width: 118px;
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 8px 0 4px;
+    }
+
+    input {
+      display: block;
+      width: min(100%, 440px);
+      min-height: 52px;
+      margin: 15px auto 4px;
+      padding: 10px 12px;
+      border: 2px solid #bdbdbd;
+      border-radius: 9px;
+      outline: none;
+      background: white;
+      color: var(--ink);
+      text-align: center;
+      font: inherit;
+      font-size: 1.35rem;
+    }
+
+    input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(36,137,76,.12);
+    }
+
+    #result {
+      min-height: 58px;
+      margin-top: 13px;
+      padding: 5px;
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+
+    .correct {
+      color: #19713a;
+    }
+
+    .incorrect {
+      color: #b3261e;
+    }
+
+    .answer {
+      color: #303030;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h2>八大菜系 拼音測驗</h2>
-        <p class="hint">請輸入拼音字母 (無需聲調，如 tangcuyu)</p>
-        
-        <h1 id="word">載入中...</h1>
-        <div id="cuisine" class="cuisine-type"></div>
-        
-        <button class="speak-btn" onclick="speak()">🔊 聽普通話發音</button>
-        
-        <input type="text" id="answer" placeholder="輸入拼音..." onkeypress="if(event.key === 'Enter') check()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        
-        <br>
-        <button class="submit-btn" onclick="check()">提交答案</button>
-        
-        <div id="result"></div>
+  <main class="container">
+    <h2>八大菜系拼音測驗</h2>
+    <p class="hint">請輸入拼音字母，不需要輸入聲調，例如：tangcuyu</p>
+
+    <div id="progress" class="progress">第 1 / 16 個詞語</div>
+    <h1 id="word">糖醋魚</h1>
+    <div id="cuisine" class="cuisine-type">【魯菜】</div>
+
+    <button class="speak-btn" type="button" onclick="speak()">聽普通話發音</button>
+
+    <input
+      id="answer"
+      type="text"
+      placeholder="輸入拼音…"
+      enterkeyhint="done"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    >
+
+    <button class="submit-btn" type="button" onclick="check()">提交答案</button>
+
+    <div id="result" aria-live="polite"></div>
+
+    <div class="nav-row">
+      <button class="nav-btn" type="button" onclick="previousWord()">上一個</button>
+      <button class="random-btn" type="button" onclick="randomWord()">隨機出題</button>
+      <button class="nav-btn" type="button" onclick="nextWord()">下一個</button>
     </div>
+  </main>
 
-    <script>
-        const data = [
-            {c:"糖醋魚", p:"tangcuyu", t:"táng cù yú", type:"魯菜"},
-            {c:"蔥爆羊肉", p:"congbaoyangrou", t:"cōng bào yáng ròu", type:"魯菜"},
-            {c:"麻婆豆腐", p:"mapodoufu", t:"má pó dòu fu", type:"川菜"},
-            {c:"宮保雞丁", p:"gongbaojiding", t:"gōng bǎo jī dīng", type:"川菜"},
-            {c:"脆皮乳豬", p:"cuipiruzhu", t:"cuì pí rǔ zhū", type:"粵菜"},
-            {c:"冬瓜盅", p:"dongguazhong", t:"dōng guā zhōng", type:"粵菜"},
-            {c:"佛跳牆", p:"fotiaoqiang", t:"fó tiào qiáng", type:"閩菜"},
-            {c:"太極明蝦", p:"taijimingxia", t:"tài jí míng xiā", type:"閩菜"},
-            {c:"淮陽獅子頭", p:"huaiyangshizitou", t:"Huáiyáng shī zi tóu", type:"蘇菜"},
-            {c:"鹽水鴨", p:"yanshuiya", t:"yán shuǐ yā", type:"蘇菜"},
-            {c:"龍井蝦仁兒", p:"longjingxiarenr", t:"lóng jǐng xiā rénr", type:"浙菜"},
-            {c:"油燜春筍", p:"youmenchunsun", t:"yóu mèn chūn sǔn", type:"浙菜"},
-            {c:"剁椒魚頭", p:"duojiaoyutou", t:"duò jiāo yú tóu", type:"湘菜"},
-            {c:"洞庭野鴨", p:"dongtingyeya", t:"Dòngtíng yě yā", type:"湘菜"},
-            {c:"徽州毛豆腐", p:"huizhoumaodoufu", t:"Huīzhōu máo dòu fu", type:"徽菜"},
-            {c:"火腿燉甲魚", p:"huotuidunjiayu", t:"huǒ tuǐ dùn jiǎ yú", type:"徽菜"}
-        ];
-        
-        let curr = 0;
-        
-        function next() {
-            curr = Math.floor(Math.random() * data.length);
-            document.getElementById('word').innerText = data[curr].c;
-            document.getElementById('cuisine').innerText = `【${data[curr].type}】`;
-            document.getElementById('answer').value = '';
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('answer').focus();
-        }
-        
-        function speak() {
-            let msg = new SpeechSynthesisUtterance(data[curr].c);
-            msg.lang = 'zh-CN'; 
-            msg.rate = 0.8; 
-            
-            // 強制抓取 iPhone 裡的普通話聲音
-            let voices = window.speechSynthesis.getVoices();
-            let mandarinVoice = voices.find(voice => voice.lang.includes('zh-CN') || voice.lang.includes('zh-TW') || voice.lang.includes('zh-Hans'));
-            
-            if (mandarinVoice) {
-                msg.voice = mandarinVoice;
-            }
-            
-            window.speechSynthesis.speak(msg);
-        }
-        
-        function check() {
-            let ans = document.getElementById('answer').value.toLowerCase().replace(/[^a-z]/g, '');
-            let resDiv = document.getElementById('result');
-            
-            if(ans === data[curr].p) {
-                resDiv.style.color = '#2e7d32';
-                resDiv.innerHTML = `✅ 答對了！<br>正確拼音：<strong>${data[curr].t}</strong>`;
-                setTimeout(next, 2000); 
-            } else {
-                resDiv.style.color = '#d32f2f';
-                resDiv.innerHTML = `❌ 拼錯了，請再試一次！<br>提示：正確答案包含 <strong>${data[curr].t}</strong>`;
-                speak(); 
-            }
-        }
-        
-        // 確保聲音庫載入
-        window.speechSynthesis.onvoiceschanged = function() {
-            let voices = window.speechSynthesis.getVoices();
-        };
+  <script>
+    const data = [
+      { c: "糖醋魚",     p: "tangcuyu",         t: "táng cù yú",        type: "魯菜" },
+      { c: "蔥爆羊肉",   p: "congbaoyangrou",   t: "cōng bào yáng ròu", type: "魯菜" },
+      { c: "麻婆豆腐",   p: "mapodoufu",        t: "má pó dòu fu",      type: "川菜" },
+      { c: "宮保雞丁",   p: "gongbaojiding",    t: "gōng bǎo jī dīng",  type: "川菜" },
+      { c: "脆皮乳豬",   p: "cuipiruzhu",       t: "cuì pí rǔ zhū",     type: "粵菜" },
+      { c: "冬瓜盅",     p: "dongguazhong",     t: "dōng guā zhōng",    type: "粵菜" },
+      { c: "佛跳牆",     p: "fotiaoqiang",      t: "fó tiào qiáng",     type: "閩菜" },
+      { c: "太極明蝦",   p: "taijimingxia",     t: "tài jí míng xiā",   type: "閩菜" },
+      { c: "淮陽獅子頭", p: "huaiyangshizitou", t: "Huáiyáng shī zi tóu", type: "蘇菜" },
+      { c: "鹽水鴨",     p: "yanshuiya",        t: "yán shuǐ yā",       type: "蘇菜" },
+      { c: "龍井蝦仁",   p: "longjingxiaren",   t: "lóng jǐng xiā rén", type: "浙菜" },
+      { c: "油燜春筍",   p: "youmenchunsun",    t: "yóu mèn chūn sǔn",  type: "浙菜" },
+      { c: "剁椒魚頭",   p: "duojiaoyutou",     t: "duò jiāo yú tóu",   type: "湘菜" },
+      { c: "洞庭野鴨",   p: "dongtingyeya",     t: "Dòngtíng yě yā",    type: "湘菜" },
+      { c: "徽州毛豆腐", p: "huizhoumaodoufu",  t: "Huīzhōu máo dòu fu", type: "徽菜" },
+      { c: "火腿燉甲魚", p: "huotuidunjiayu",   t: "huǒ tuǐ dùn jiǎ yú", type: "徽菜" }
+    ];
 
-        window.onload = next;
-    </script>
+    let currentIndex = 0;
+
+    function showWord() {
+      const item = data[currentIndex];
+
+      document.getElementById("word").textContent = item.c;
+      document.getElementById("cuisine").textContent = `【${item.type}】`;
+      document.getElementById("progress").textContent =
+        `第 <LaTex>{currentIndex + 1} /</LaTex>{data.length} 個詞語`;
+
+      document.getElementById("answer").value = "";
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("answer").focus();
+    }
+
+    function previousWord() {
+      currentIndex = (currentIndex - 1 + data.length) % data.length;
+      showWord();
+    }
+
+    function nextWord() {
+      currentIndex = (currentIndex + 1) % data.length;
+      showWord();
+    }
+
+    function randomWord() {
+      if (data.length > 1) {
+        let newIndex;
+
+        do {
+          newIndex = Math.floor(Math.random() * data.length);
+        } while (newIndex === currentIndex);
+
+        currentIndex = newIndex;
+      }
+
+      showWord();
+    }
+
+    function pickMandarinVoice() {
+      const voices = window.speechSynthesis.getVoices();
+
+      return voices.find(v => /^zh[-_]CN/i.test(v.lang)) ||
+             voices.find(v => /zh[-_](Hans|TW)/i.test(v.lang)) ||
+             voices.find(v => /Mandarin|普通話|國語/i.test(v.name)) ||
+             null;
+    }
+
+    function speak() {
+      window.speechSynthesis.cancel();
+
+      const msg = new SpeechSynthesisUtterance(data[currentIndex].c);
+      msg.lang = "zh-CN";
+      msg.rate = 0.78;
+
+      const mandarinVoice = pickMandarinVoice();
+
+      if (mandarinVoice) {
+        msg.voice = mandarinVoice;
+      }
+
+      window.speechSynthesis.speak(msg);
+    }
+
+    function check() {
+      const answer = document.getElementById("answer").value
+        .toLowerCase()
+        .replace(/[^a-z]/g, "");
+
+      const item = data[currentIndex];
+      const result = document.getElementById("result");
+
+      if (!answer) {
+        result.className = "incorrect";
+        result.textContent = "請先輸入拼音。";
+      } else if (answer === item.p) {
+        result.className = "correct";
+        result.innerHTML = `答對了！正確拼音：<strong>${item.t}</strong>`;
+      } else {
+        result.className = "incorrect";
+        result.innerHTML = `再試一次。正確拼音是：<strong class="answer">${item.t}</strong>`;
+        speak();
+      }
+    }
+
+    document.getElementById("answer").addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        check();
+      }
+    });
+
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+
+    showWord();
+  </script>
 </body>
 </html>
