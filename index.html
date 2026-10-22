@@ -31,7 +31,7 @@
     .container {
       max-width: 620px;
       margin: 0 auto;
-      padding: 28px 20px 26px;
+      padding: 28px 16px 26px;
       background: var(--paper);
       border-radius: 18px;
       box-shadow: 0 6px 20px rgba(79, 53, 22, .14);
@@ -42,7 +42,8 @@
       font-size: 1.7rem;
     }
 
-    .hint {
+    .hint,
+    .tone-hint {
       margin: 0;
       color: #666;
       line-height: 1.55;
@@ -62,6 +63,16 @@
       color: #666;
       font-weight: 700;
       font-size: 1.1rem;
+    }
+
+    .dish-illustration {
+      width: min(190px, 58vw);
+      aspect-ratio: 1;
+      margin: 0 auto 4px;
+      background-image: url("dishes-sprite.webp");
+      background-repeat: no-repeat;
+      background-size: 400% 400%;
+      background-position: 0% 0%;
     }
 
     button {
@@ -109,6 +120,31 @@
       min-width: 118px;
     }
 
+    .score-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 4px;
+    }
+
+    .score {
+      padding: 9px 14px;
+      border-radius: 9px;
+      background: #e8f5eb;
+      color: #19713a;
+      font-weight: 800;
+    }
+
+    .reset-score {
+      min-height: 38px;
+      margin: 0;
+      padding: 7px 11px;
+      background: #777;
+      font-size: .9rem;
+    }
+
     .button-row,
     .nav-row {
       display: flex;
@@ -138,11 +174,78 @@
       box-shadow: 0 0 0 3px rgba(36,137,76,.12);
     }
 
+    .tone-section {
+      margin: 20px 0 10px;
+      padding: 14px 8px 10px;
+      border: 1px solid #e1d3bd;
+      border-radius: 12px;
+      background: #fffbf3;
+    }
+
+    .tone-title {
+      margin: 0 0 4px;
+      color: var(--gold);
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .tone-grid {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .tone-card {
+      width: 58px;
+      padding: 6px 4px;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      background: white;
+    }
+
+    .tone-character {
+      margin-bottom: 5px;
+      color: var(--red);
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .tone-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+    }
+
+    .tone-btn {
+      min-height: 31px;
+      margin: 0;
+      padding: 2px;
+      border: 1px solid #b9b9b9;
+      border-radius: 6px;
+      background: #f3f3f3;
+      color: #444;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .tone-btn.neutral {
+      grid-column: span 2;
+    }
+
+    .tone-btn.selected {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: white;
+    }
+
     #result {
-      min-height: 58px;
+      min-height: 62px;
       margin-top: 13px;
       padding: 5px;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       line-height: 1.6;
     }
 
@@ -154,23 +257,35 @@
 <body>
   <main class="container">
     <h2>八大菜系拼音測驗</h2>
-    <p class="hint">請輸入拼音字母，不需要輸入聲調，例如：tangcuyu</p>
+    <p class="hint">先輸入拼音字母，再為每一個字選擇聲調。</p>
+
+    <div class="score-panel">
+      <div id="score" class="score">答對 0 / 16 題</div>
+      <button class="reset-score" type="button" onclick="resetScore()">重設分數</button>
+    </div>
 
     <h1 id="word">糖醋魚</h1>
     <div id="cuisine" class="cuisine-type">【魯菜】</div>
+    <div id="dishIllustration" class="dish-illustration" role="img" aria-label="糖醋魚插圖"></div>
 
     <button class="speak-btn" type="button" onclick="speak()">聽普通話發音</button>
 
     <input
       id="answer"
       type="text"
-      placeholder="輸入拼音…"
+      placeholder="輸入拼音，例如：tangcuyu"
       enterkeyhint="done"
       autocomplete="off"
       autocorrect="off"
       autocapitalize="off"
       spellcheck="false"
     >
+
+    <section class="tone-section" aria-label="聲調選擇">
+      <p class="tone-title">選擇每個字的聲調</p>
+      <p class="tone-hint">1＝第一聲　2＝第二聲　3＝第三聲　4＝第四聲　輕＝輕聲</p>
+      <div id="toneGrid" class="tone-grid"></div>
+    </section>
 
     <div class="button-row">
       <button class="submit-btn" type="button" onclick="check()">提交答案</button>
@@ -188,57 +303,113 @@
 
   <script>
     const data = [
-      { c: "糖醋魚", p: "tangcuyu", t: "táng cù yú", type: "魯菜" },
-      { c: "蔥爆羊肉", p: "congbaoyangrou", t: "cōng bào yáng ròu", type: "魯菜" },
-      { c: "麻婆豆腐", p: "mapodoufu", t: "má pó dòu fu", type: "川菜" },
-      { c: "宮保雞丁", p: "gongbaojiding", t: "gōng bǎo jī dīng", type: "川菜" },
-      { c: "脆皮乳豬", p: "cuipiruzhu", t: "cuì pí rǔ zhū", type: "粵菜" },
-      { c: "冬瓜盅", p: "dongguazhong", t: "dōng guā zhōng", type: "粵菜" },
-      { c: "佛跳牆", p: "fotiaoqiang", t: "fó tiào qiáng", type: "閩菜" },
-      { c: "太極明蝦", p: "taijimingxia", t: "tài jí míng xiā", type: "閩菜" },
+      { c: "糖醋魚", p: "tangcuyu", t: "táng cù yú", type: "魯菜", tones: [2, 4, 2] },
+      { c: "蔥爆羊肉", p: "congbaoyangrou", t: "cōng bào yáng ròu", type: "魯菜", tones: [1, 4, 2, 4] },
+      { c: "麻婆豆腐", p: "mapodoufu", t: "má pó dòu fu", type: "川菜", tones: [2, 2, 4, 0] },
+      { c: "宮保雞丁", p: "gongbaojiding", t: "gōng bǎo jī dīng", type: "川菜", tones: [1, 3, 1, 1] },
+      { c: "脆皮乳豬", p: "cuipiruzhu", t: "cuì pí rǔ zhū", type: "粵菜", tones: [4, 2, 3, 1] },
+      { c: "冬瓜盅", p: "dongguazhong", t: "dōng guā zhōng", type: "粵菜", tones: [1, 1, 1] },
+      { c: "佛跳牆", p: "fotiaoqiang", t: "fó tiào qiáng", type: "閩菜", tones: [2, 4, 2] },
+      { c: "太極明蝦", p: "taijimingxia", t: "tài jí míng xiā", type: "閩菜", tones: [4, 2, 2, 1] },
       {
         c: "淮陽獅子頭",
         p: "huaiyangshizitou",
-        t: "Huaiyang shi zi tou",
+        t: "Huáiyáng shī zi tóu",
         type: "蘇菜",
+        tones: [2, 2, 1, 0, 2],
         strictAnswer: "Huaiyangshizitou",
         placeName: "Huaiyang",
-        formatHint: "Huaiyang 要連住寫，並以大楷 H 開頭。"
+        formatHint: "輸入時 Huaiyang 要連住寫，並以大楷 H 開頭。"
       },
-      { c: "鹽水鴨", p: "yanshuiya", t: "yán shuǐ yā", type: "蘇菜" },
-      { c: "龍井蝦仁", p: "longjingxiaren", t: "lóng jǐng xiā rén", type: "浙菜" },
-      { c: "油燜春筍", p: "youmenchunsun", t: "yóu mèn chūn sǔn", type: "浙菜" },
-      { c: "剁椒魚頭", p: "duojiaoyutou", t: "duò jiāo yú tóu", type: "湘菜" },
+      { c: "鹽水鴨", p: "yanshuiya", t: "yán shuǐ yā", type: "蘇菜", tones: [2, 3, 1] },
+      { c: "龍井蝦仁", p: "longjingxiaren", t: "lóng jǐng xiā rén", type: "浙菜", tones: [2, 3, 1, 2] },
+      { c: "油燜春筍", p: "youmenchunsun", t: "yóu mèn chūn sǔn", type: "浙菜", tones: [2, 4, 1, 3] },
+      { c: "剁椒魚頭", p: "duojiaoyutou", t: "duò jiāo yú tóu", type: "湘菜", tones: [4, 1, 2, 2] },
       {
         c: "洞庭野鴨",
         p: "dongtingyeya",
-        t: "Dongting ye ya",
+        t: "Dòngtíng yě yā",
         type: "湘菜",
+        tones: [4, 2, 3, 1],
         strictAnswer: "Dongtingyeya",
         placeName: "Dongting",
-        formatHint: "Dongting 要連住寫，並以大楷 D 開頭。"
+        formatHint: "輸入時 Dongting 要連住寫，並以大楷 D 開頭。"
       },
       {
         c: "徽州毛豆腐",
         p: "huizhoumaodoufu",
-        t: "Huizhou mao dou fu",
+        t: "Huīzhōu máo dòu fu",
         type: "徽菜",
+        tones: [1, 1, 2, 4, 0],
         strictAnswer: "Huizhoumaodoufu",
         placeName: "Huizhou",
-        formatHint: "Huizhou 要連住寫，並以大楷 H 開頭。"
+        formatHint: "輸入時 Huizhou 要連住寫，並以大楷 H 開頭。"
       },
-      { c: "火腿燉甲魚", p: "huotuidunjiayu", t: "huǒ tuǐ dùn jiǎ yú", type: "徽菜" }
+      { c: "火腿燉甲魚", p: "huotuidunjiayu", t: "huǒ tuǐ dùn jiǎ yú", type: "徽菜", tones: [3, 3, 4, 3, 2] }
     ];
 
     let currentIndex = 0;
+    let selectedTones = [];
     let mandarinVoice = null;
     let speechRequest = 0;
+    const scoreStorageKey = "pinyin8dishesCorrectIndexesV1";
+    let correctIndexes = new Set();
+
+    function loadScore() {
+      try {
+        const savedIndexes = JSON.parse(localStorage.getItem(scoreStorageKey));
+
+        if (Array.isArray(savedIndexes)) {
+          correctIndexes = new Set(savedIndexes.filter(function (index) {
+            return Number.isInteger(index) && index >= 0 && index < data.length;
+          }));
+        }
+      } catch (error) {
+        correctIndexes = new Set();
+      }
+
+      updateScore();
+    }
+
+    function saveScore() {
+      try {
+        localStorage.setItem(scoreStorageKey, JSON.stringify(Array.from(correctIndexes)));
+      } catch (error) {
+        /* The score still works for the current page even if storage is unavailable. */
+      }
+    }
+
+    function updateScore() {
+      document.getElementById("score").textContent =
+        "答對 " + correctIndexes.size + " / " + data.length + " 題";
+    }
+
+    function resetScore() {
+      if (!window.confirm("確定要重設分數嗎？")) return;
+
+      correctIndexes.clear();
+      saveScore();
+      updateScore();
+      document.getElementById("result").className = "correct";
+      document.getElementById("result").textContent = "分數已重設。";
+    }
 
     function showWord() {
       const item = data[currentIndex];
       document.getElementById("word").textContent = item.c;
       document.getElementById("cuisine").textContent = "【" + item.type + "】";
+      updateIllustration(item);
       clearAnswer();
+    }
+
+    function updateIllustration(item) {
+      const positions = ["0%", "33.333%", "66.667%", "100%"];
+      const illustration = document.getElementById("dishIllustration");
+      const column = currentIndex % 4;
+      const row = Math.floor(currentIndex / 4);
+
+      illustration.style.backgroundPosition = positions[column] + " " + positions[row];
+      illustration.setAttribute("aria-label", item.c + "插圖");
     }
 
     function previousWord() {
@@ -265,9 +436,60 @@
       showWord();
     }
 
+    function renderToneChoices() {
+      const grid = document.getElementById("toneGrid");
+      const item = data[currentIndex];
+      const characters = Array.from(item.c);
+      const choices = [1, 2, 3, 4, 0];
+
+      grid.textContent = "";
+
+      characters.forEach(function (character, characterIndex) {
+        const card = document.createElement("div");
+        card.className = "tone-card";
+
+        const characterLabel = document.createElement("div");
+        characterLabel.className = "tone-character";
+        characterLabel.textContent = character;
+        card.appendChild(characterLabel);
+
+        const options = document.createElement("div");
+        options.className = "tone-options";
+
+        choices.forEach(function (tone) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "tone-btn";
+
+          if (tone === 0) {
+            button.className = "tone-btn neutral";
+            button.textContent = "輕";
+          } else {
+            button.textContent = String(tone);
+          }
+
+          if (selectedTones[characterIndex] === tone) {
+            button.className += " selected";
+          }
+
+          button.addEventListener("click", function () {
+            selectedTones[characterIndex] = tone;
+            renderToneChoices();
+          });
+
+          options.appendChild(button);
+        });
+
+        card.appendChild(options);
+        grid.appendChild(card);
+      });
+    }
+
     function clearAnswer() {
+      selectedTones = [];
       document.getElementById("answer").value = "";
       document.getElementById("result").textContent = "";
+      renderToneChoices();
       document.getElementById("answer").focus();
     }
 
@@ -332,25 +554,48 @@
         words[0].indexOf(item.placeName) === 0;
     }
 
+    function areTonesCorrect(item) {
+      if (selectedTones.length !== item.tones.length) return false;
+
+      return item.tones.every(function (tone, index) {
+        return selectedTones[index] === tone;
+      });
+    }
+
     function check() {
       const rawAnswer = document.getElementById("answer").value.trim();
       const answer = rawAnswer.toLowerCase().replace(/[^a-z]/g, "");
       const item = data[currentIndex];
       const result = document.getElementById("result");
 
-      const isCorrect = item.strictAnswer
+      const spellingCorrect = item.strictAnswer
         ? isStrictAnswer(rawAnswer, item)
         : answer === item.p;
+
+      const tonesCorrect = areTonesCorrect(item);
 
       if (!answer) {
         result.className = "incorrect";
         result.textContent = "請先輸入拼音。";
-      } else if (isCorrect) {
+      } else if (selectedTones.length < item.tones.length) {
+        result.className = "incorrect";
+        result.textContent = "請為每一個字選擇聲調。";
+      } else if (spellingCorrect && tonesCorrect) {
+        const isNewCorrectAnswer = !correctIndexes.has(currentIndex);
+
+        if (isNewCorrectAnswer) {
+          correctIndexes.add(currentIndex);
+          saveScore();
+          updateScore();
+        }
+
         result.className = "correct";
-        result.textContent = "答對了！正確拼音：" + item.t;
+        result.textContent = isNewCorrectAnswer
+          ? "答對了！正確拼音：" + item.t
+          : "這一題已答對。正確拼音：" + item.t;
       } else {
         result.className = "incorrect";
-        result.textContent = "再試一次。正確拼音是：" + item.t +
+        result.textContent = "再試一次。正確拼音和聲調是：" + item.t +
           (item.formatHint ? " " + item.formatHint : "");
         speak();
       }
@@ -368,6 +613,7 @@
     setTimeout(findMandarinVoice, 300);
     setTimeout(findMandarinVoice, 1000);
 
+    loadScore();
     showWord();
   </script>
 </body>
